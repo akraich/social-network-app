@@ -30,6 +30,12 @@ app.use(cookieParser());
 app.use(postRoutes);
 app.use(authRoutes);
 
+app.use(function(err, req, res, next) {
+  if (err.name === "UnauthorizedError") {
+    res.status(401).json({ message: "Unauthorized!" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Connected successfully on port: ${PORT}`);
 });
