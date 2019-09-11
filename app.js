@@ -8,8 +8,10 @@ const dotenv = require("dotenv");
 
 const app = express();
 const PORT = process.env.PORT || 3500;
+
 const postRoutes = require("./routes/post");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 dotenv.config();
 
@@ -29,6 +31,7 @@ app.use(cookieParser());
 
 app.use(postRoutes);
 app.use(authRoutes);
+app.use(userRoutes);
 
 app.use(function(err, req, res, next) {
   if (err.name === "UnauthorizedError") {
