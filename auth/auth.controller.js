@@ -2,14 +2,14 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const dotenv = require("dotenv");
 
-const User = require("../models/user");
+const User = require("../user/user.model");
 
 dotenv.config();
 
 exports.signup = async (req, res) => {
   const userExists = await User.findOne({ email: req.body.email });
   if (userExists)
-    return res.status(403).json({ message: "Email is already taken" });
+    return res.status(403).json({ error: "Email is already taken" });
   const user = new User(req.body);
   await user.save();
   res.status(200).json({ message: "User registered successfully" });

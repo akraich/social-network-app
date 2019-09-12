@@ -1,7 +1,7 @@
 const fs = require("fs");
 const formidable = require("formidable");
 
-const Post = require("../models/post");
+const Post = require("../post/post.model");
 
 exports.postById = (req, res, next, id) => {
   Post.find(id)

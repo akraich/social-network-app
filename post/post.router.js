@@ -2,9 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-const authController = require("../controllers/auth");
-const userController = require("../controllers/user");
-const postController = require("../controllers/post");
+const authController = require("../auth/auth.controller");
+const userController = require("../user/user.controller");
+const postController = require("../post/post.controller");
 
 router.get("/", postController.getPosts);
 

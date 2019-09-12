@@ -2,16 +2,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 
 const app = express();
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 8080;
 
-const postRoutes = require("./routes/post");
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user");
+const postRoutes = require("./post/post.router");
+const authRoutes = require("./auth/auth.router");
+const userRoutes = require("./user/user.router");
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ mongoose.connection.on("error", error =>
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use(postRoutes);
 app.use(authRoutes);
