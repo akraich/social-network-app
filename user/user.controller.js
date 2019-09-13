@@ -1,7 +1,7 @@
-const _ = require("lodash");
-const User = require("./user.model");
+import _ from "lodash";
+import User from "./user.model";
 
-exports.userById = (req, res, next, id) => {
+export const userById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
     if (err || !user) {
       return res.status(400).json({ message: "User not found" });
@@ -11,7 +11,7 @@ exports.userById = (req, res, next, id) => {
   });
 };
 
-exports.hasAuthorization = (req, res, next) => {
+export const hasAuthorization = (req, res, next) => {
   const authorized =
     req.profile && req.auth && req.profile._id === req.auth._id;
 
@@ -23,7 +23,7 @@ exports.hasAuthorization = (req, res, next) => {
   next();
 };
 
-exports.allUsers = (req, res) => {
+export const allUsers = (req, res) => {
   User.find((err, users) => {
     if (err) {
       return res.status(400).json({
@@ -34,13 +34,13 @@ exports.allUsers = (req, res) => {
   }).select("name email created updated");
 };
 
-exports.getUser = (req, res) => {
+export const getUser = (req, res) => {
   req.profile.hashed_password = undefined;
   req.profile.salt = undefined;
   res.json(req.profile);
 };
 
-exports.updateUser = (req, res) => {
+export const updateUser = (req, res) => {
   let user = req.profile;
   user = _.extend(user, req.body);
   user.updated = Date.now();
@@ -56,7 +56,7 @@ exports.updateUser = (req, res) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
+export const deleteUser = (req, res) => {
   let user = req.profile;
   user.remove(err => {
     if (err) {

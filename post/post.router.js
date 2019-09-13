@@ -1,40 +1,30 @@
-const express = require("express");
+import express from "express";
 
 const router = express.Router();
 
-const authController = require("../auth/auth.controller");
-const userController = require("../user/user.controller");
-const postController = require("../post/post.controller");
+import { requireSignin } from "../auth/auth.controller";
+import { userById } from "../user/user.controller";
+import {
+  createPost,
+  postsByUser,
+  postById,
+  isPoster,
+  updatePost,
+  deletePost,
+  getPosts
+} from "../post/post.controller";
 
-router.get("/", postController.getPosts);
+router.get("/", getPosts);
 
-router.post(
-  "/posts/new/:userId",
-  authController.requireSignin,
-  postController.createPost
-);
+router.post("/posts/new/:userId", requireSignin, createPost);
 
-router.get(
-  "/posts/by/:userId",
-  authController.requireSignin,
-  postController.postsByUser
-);
+router.get("/posts/by/:userId", requireSignin, postsByUser);
 
-router.put(
-  "/posts/:postId",
-  authController.requireSignin,
-  postController.isPoster,
-  postController.updatePost
-);
+router.put("/posts/:postId", requireSignin, isPoster, updatePost);
 
-router.delete(
-  "/posts/:postId",
-  authController.requireSignin,
-  postController.isPoster,
-  postController.deletePost
-);
+router.delete("/posts/:postId", requireSignin, isPoster, deletePost);
 
-router.param("userId", userController.userById);
-router.param("postId", postController.postById);
+router.param("userId", userById);
+router.param("postId", postById);
 
-module.exports = router;
+export default router;

@@ -1,27 +1,21 @@
-const express = require("express");
+import express from "express";
 
 const router = express.Router();
 
-const userController = require("./user.controller");
-const authController = require("../auth/auth.controller");
+import {
+  getUser,
+  userById,
+  updateUser,
+  deleteUser,
+  allUsers
+} from "./user.controller";
+import { requireSignin } from "../auth/auth.controller";
 
-router.get("/users", userController.allUsers);
-router.get(
-  "/users/:userId",
-  authController.requireSignin,
-  userController.getUser
-);
-router.put(
-  "/users/:userId",
-  authController.requireSignin,
-  userController.updateUser
-);
-router.delete(
-  "/users/:userId",
-  authController.requireSignin,
-  userController.deleteUser
-);
+router.get("/users", allUsers);
+router.get("/users/:userId", requireSignin, getUser);
+router.put("/users/:userId", requireSignin, updateUser);
+router.delete("/users/:userId", requireSignin, deleteUser);
 
-router.param("userId", userController.userById);
+router.param("userId", userById);
 
-module.exports = router;
+export default router;

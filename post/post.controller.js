@@ -1,9 +1,9 @@
-const fs = require("fs");
-const formidable = require("formidable");
+import fs from "fs";
+import formidable from "formidable";
 
-const Post = require("../post/post.model");
+import Post from "../post/post.model";
 
-exports.postById = (req, res, next, id) => {
+export const postById = (req, res, next, id) => {
   Post.find(id)
     .populate("postedBy", "_id, name")
     .exec((err, post) => {
@@ -15,15 +15,22 @@ exports.postById = (req, res, next, id) => {
     });
 };
 
-exports.getPosts = (req, res) => {
-  Post.find()
-    .populate("postedBy", "_id name")
-    .select("_id title body")
-    .then(posts => res.json({ posts: posts }))
-    .catch(err => console.log(err));
+export const getPosts = async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("postedBy", "_id name")
+      .select("_id title body")
+      .exec();
+    if (!posts) {
+      return res.status(404).end();
+    }
+    res.json({ data: posts });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-exports.createPost = (req, res) => {
+export const createPost = (req, res) => {
   let form = formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse((err, fields, files) => {
@@ -51,7 +58,7 @@ exports.createPost = (req, res) => {
   });
 };
 
-exports.postsByUser = (req, res) => {
+export const postsByUser = (req, res) => {
   Post.find({ postedBy: req.profile })
     .populate("postedBy", "_id name")
     .sort("created")
@@ -67,7 +74,7 @@ exports.postsByUser = (req, res) => {
     });
 };
 
-exports.isPoster = (req, res, next) => {
+export const isPoster = (req, res, next) => {
   const isPoster =
     req.post && req.auth && req.post.postedBy._id == req.auth._id;
 
@@ -79,7 +86,7 @@ exports.isPoster = (req, res, next) => {
   next();
 };
 
-exports.updatePost = (req, res) => {
+export const updatePost = (req, res) => {
   let post = req.post;
   post = _.extend(post, req.body);
   post.updated = Date.now();
@@ -93,7 +100,7 @@ exports.updatePost = (req, res) => {
   });
 };
 
-exports.deletePost = (req, res) => {
+export const deletePost = (req, res) => {
   let post = req.post;
   post.remove(err => {
     if (err) {

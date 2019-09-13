@@ -1,21 +1,24 @@
-const jwt = require("jsonwebtoken");
-const expressJwt = require("express-jwt");
-const dotenv = require("dotenv");
+import jwt from "jsonwebtoken";
+import expressJwt from "express-jwt";
+import dotenv from "dotenv";
 
-const User = require("../user/user.model");
+import User from "../user/user.model";
 
 dotenv.config();
 
-exports.signup = async (req, res) => {
-  const userExists = await User.findOne({ email: req.body.email });
-  if (userExists)
-    return res.status(403).json({ error: "Email is already taken" });
-  const user = new User(req.body);
-  await user.save();
-  res.status(200).json({ message: "User registered successfully" });
+export const signup = async (req, res) => {
+  try {
+    const userExists = await User.findOne({ email: req.body.email });
+    if (userExists)
+      return res.status(403).json({ data: "Email is already taken" });
+    const user = await User.create(req.body);
+    res.status(200).json({ data: "User registered successfully" });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-exports.signin = (req, res) => {
+export const signin = (req, res) => {
   const { email, password } = req.body;
   User.findOne({ email }, (err, user) => {
     if (err || !user) {
@@ -35,12 +38,12 @@ exports.signin = (req, res) => {
   });
 };
 
-exports.signout = (req, res) => {
+export const signout = (req, res) => {
   res.clearCookie("t");
   res.json({ message: "You signed out" });
 };
 
-exports.requireSignin = expressJwt({
+export const requireSignin = expressJwt({
   secret: process.env.SECRET_TOKEN,
   userProperty: "auth"
 });

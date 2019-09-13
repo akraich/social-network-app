@@ -1,18 +1,18 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+import express from "express";
+import mongoose from "mongoose";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
-const morgan = require("morgan");
-const dotenv = require("dotenv");
+import morgan from "morgan";
+import dotenv from "dotenv";
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 
-const postRoutes = require("./post/post.router");
-const authRoutes = require("./auth/auth.router");
-const userRoutes = require("./user/user.router");
+import postRoutes from "./post/post.router";
+import authRoutes from "./auth/auth.router";
+import userRoutes from "./user/user.router";
 
 dotenv.config();
 

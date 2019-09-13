@@ -4,7 +4,7 @@
   "description": "Social Network App API",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon --exec babel-node app.js"
   },
   "author": "SimoJS",
   "license": "ISC",
@@ -21,5 +21,10 @@
     "mongoose": "^5.7.0",
     "morgan": "^1.9.1",
     "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/node": "^7.6.1",
+    "@babel/preset-env": "^7.6.0"
   }
 }
